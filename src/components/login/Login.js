@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { BaseContainer } from "../../helpers/layout";
 import { getDomain } from "../../helpers/getDomain";
 import User from "../shared/models/User";
-import { withRouter } from "react-router-dom";
+import {Link, withRouter} from "react-router-dom";
 import { Button } from "../../views/design/Button";
 
 const FormContainer = styled.div`
@@ -56,6 +56,10 @@ const ButtonContainer = styled.div`
   margin-top: 20px;
 `;
 
+const StyledLink = styled(Link)`
+  color: #fff;
+`;
+
 /**
  * Classes in React allow you to have an internal state within the class and to have the React life-cycle for your component.
  * You should have a class (instead of a functional component) when:
@@ -91,7 +95,7 @@ class Login extends React.Component {
       },
       body: JSON.stringify({
         username: this.state.username,
-        name: this.state.name
+        password: this.state.password
       })
     })
       .then(response => response.json())
@@ -160,6 +164,9 @@ class Login extends React.Component {
               >
                 Login
               </Button>
+            </ButtonContainer>
+            <ButtonContainer>
+              <StyledLink to="/register">Don't have an account? Sign up now!</StyledLink>
             </ButtonContainer>
           </Form>
         </FormContainer>
