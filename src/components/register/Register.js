@@ -98,19 +98,22 @@ class Register extends React.Component {
         password: this.state.password
       })
     })
-      .then(response => response.json())
-      .then(returnedUser => {
-        const user = new User(returnedUser);
-        // store the token into the local storage
-        localStorage.setItem("token", user.token);
-        // user login successfully worked --> navigate to the route /game in the GameRouter
-        this.props.history.push(`/game`);
+      .then(response =>{
+          response.json();
+          var status = response.status;
+          if(status === 201){
+              this.props.history.push(`/login`);
+          }else if(status === 409){
+              alert("this username has already been taken!");
+          }else{
+              alert("The server responded with status: " + status);
+          }
       })
       .catch(err => {
         if (err.message.match(/Failed to fetch/)) {
           alert("The server cannot be reached. Did you start it?");
         } else {
-          alert(`Something went wrong during the login: ${err.message}`);
+          alert(`Something went wrong during the register: ${err.message}`);
         }
       });
   }
@@ -134,11 +137,6 @@ class Register extends React.Component {
    * It will trigger an extra rendering, but it will happen before the browser updates the screen.
    */
   componentDidMount() {
-    var users = fetch(`${getDomain()}/users`, {
-      method: "GET",
-    });
-    console.log(users);
-    this.setState({users:users});
   }
 
   render() {
@@ -149,6 +147,7 @@ class Register extends React.Component {
             <Label>Username</Label>
             <InputField
               placeholder="Enter here.."
+              required
               onChange={e => {
                 this.handleInputChange("username", e.target.value);
               }}
@@ -156,6 +155,8 @@ class Register extends React.Component {
             <Label>Password</Label>
             <InputField
               placeholder="Enter here.."
+              type="password"
+              required
               onChange={e => {
                 this.handleInputChange("password", e.target.value);
               }}
