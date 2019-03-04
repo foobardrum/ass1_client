@@ -6,7 +6,13 @@ import User from "../shared/models/User";
 import {Link, withRouter} from "react-router-dom";
 import { Button } from "../../views/design/Button";
 
+const Container = styled(BaseContainer)`
+  text-align: center;
+  color: #FFF;
+`;
+
 const FormContainer = styled.div`
+  text-align: left;
   margin-top: 2em;
   display: flex;
   flex-direction: column;
@@ -103,6 +109,7 @@ class Login extends React.Component {
           const user = new User(returnedUser);
           // store the token into the local storage
           localStorage.setItem("token", user.token);
+          localStorage.setItem("userId", user.id);
           // user login successfully worked --> navigate to the route /game in the GameRouter
           this.props.history.push(`/game`);
         }else{
@@ -142,8 +149,8 @@ class Login extends React.Component {
 
   render() {
     return (
-      <BaseContainer>
-        <h1>Login</h1>
+      <Container>
+        <h2>Login</h2>
         <FormContainer>
           <Form>
             <Label>Username</Label>
@@ -179,7 +186,7 @@ class Login extends React.Component {
             </ButtonContainer>
           </Form>
         </FormContainer>
-      </BaseContainer>
+      </Container>
     );
   }
 }
