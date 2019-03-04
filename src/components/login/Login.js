@@ -98,12 +98,16 @@ class Login extends React.Component {
     })
       .then(response => response.json())
       .then((returnedUsers) => {
-        const returnedUser = returnedUsers[0];
-        const user = new User(returnedUser);
-        // store the token into the local storage
-        localStorage.setItem("token", user.token);
-        // user login successfully worked --> navigate to the route /game in the GameRouter
-        this.props.history.push(`/game`);
+        if(returnedUsers.length > 0) {
+          const returnedUser = returnedUsers[0];
+          const user = new User(returnedUser);
+          // store the token into the local storage
+          localStorage.setItem("token", user.token);
+          // user login successfully worked --> navigate to the route /game in the GameRouter
+          this.props.history.push(`/game`);
+        }else{
+          alert("Login not successful! Please check your username / password...")
+        }
       })
       .catch(err => {
         if (err.message.match(/Failed to fetch/)) {
