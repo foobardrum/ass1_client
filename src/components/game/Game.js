@@ -25,6 +25,14 @@ const PlayerContainer = styled.li`
   justify-content: center;
 `;
 
+const StyledLink = styled(Link)`
+  color: #FFF;
+  text-decoration: none;
+  &:visited{
+   color:#FFF; 
+  }
+`;
+
 class Game extends React.Component {
   constructor() {
     super();
@@ -81,9 +89,9 @@ class Game extends React.Component {
               {this.state.users.map(user => {
                 return (
                   <PlayerContainer key={user.id}>
-                      <Link to={"/game/dashboard/users/"+user.id}>
+                      <StyledLink to={"/game/dashboard/users/"+user.id}>
                         <Player user={user} />
-                      </Link>
+                      </StyledLink>
                   </PlayerContainer>
                 );
               })}

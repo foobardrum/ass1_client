@@ -9,6 +9,9 @@ const Container = styled.div`
   display: flex;
   align-items: center;
   border: 1px solid #ffffff26;
+    &:hover{
+    background-color: rgba(255,255,255,.3);
+  }
 `;
 
 const UserName = styled.div`
