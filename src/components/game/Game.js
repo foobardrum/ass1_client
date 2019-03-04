@@ -6,6 +6,7 @@ import Player from "../../views/Player";
 import { Spinner } from "../../views/design/Spinner";
 import { Button } from "../../views/design/Button";
 import { withRouter } from "react-router-dom";
+import Link from "react-router-dom/es/Link";
 
 const Container = styled(BaseContainer)`
   color: white;
@@ -80,7 +81,9 @@ class Game extends React.Component {
               {this.state.users.map(user => {
                 return (
                   <PlayerContainer key={user.id}>
-                    <Player user={user} />
+                      <Link to={"/game/dashboard/users/"+user.id}>
+                        <Player user={user} />
+                      </Link>
                   </PlayerContainer>
                 );
               })}
