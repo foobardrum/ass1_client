@@ -79,8 +79,8 @@ class Login extends React.Component {
   constructor() {
     super();
     this.state = {
-      name: null,
-      username: null
+      username: null,
+      password: null
     };
   }
   /**
@@ -88,18 +88,17 @@ class Login extends React.Component {
    * If the request is successful, a new user is returned to the front-end and its token is stored in the localStorage.
    */
   login() {
-    fetch(`${getDomain()}/users`, {
-      method: "POST",
+      //query in rsql language: https://github.com/jirutka/rsql-parser
+      var query = 'username=="'+this.state.username+'";password=="'+this.state.password+'"';
+    fetch(`${getDomain()}/users?search=`+query, {
+      method: "GET",
       headers: {
         "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        username: this.state.username,
-        password: this.state.password
-      })
+      }
     })
       .then(response => response.json())
-      .then(returnedUser => {
+      .then((returnedUsers) => {
+        const returnedUser = returnedUsers[0];
         const user = new User(returnedUser);
         // store the token into the local storage
         localStorage.setItem("token", user.token);
@@ -133,30 +132,36 @@ class Login extends React.Component {
    * You may call setState() immediately in componentDidMount().
    * It will trigger an extra rendering, but it will happen before the browser updates the screen.
    */
-  componentDidMount() {}
+  componentDidMount() {
+
+  }
 
   render() {
     return (
       <BaseContainer>
+        <h1>Login</h1>
         <FormContainer>
           <Form>
             <Label>Username</Label>
             <InputField
               placeholder="Enter here.."
+              required
               onChange={e => {
                 this.handleInputChange("username", e.target.value);
               }}
             />
-            <Label>Name</Label>
+            <Label>Password</Label>
             <InputField
               placeholder="Enter here.."
+              type="password"
+              required
               onChange={e => {
-                this.handleInputChange("name", e.target.value);
+                this.handleInputChange("password", e.target.value);
               }}
             />
             <ButtonContainer>
               <Button
-                disabled={!this.state.username || !this.state.name}
+                disabled={!this.state.username || !this.state.password}
                 width="50%"
                 onClick={() => {
                   this.login();
