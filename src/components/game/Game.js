@@ -33,8 +33,21 @@ class Game extends React.Component {
   }
 
   logout() {
-    localStorage.removeItem("token");
-    this.props.history.push("/login");
+    fetch(`${getDomain()}/users/`+localStorage.getItem('userId'), {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body:JSON.stringify({
+        status: "OFFLINE"
+      })
+    }).then(response => {
+      localStorage.removeItem("token");
+      localStorage.removeItem("userId");
+      this.props.history.push("/login");
+    }).catch(err => {
+      alert('Couldn\'t log out!');
+    });
   }
 
   componentDidMount() {
@@ -45,12 +58,7 @@ class Game extends React.Component {
       }
     })
       .then(response => response.json())
-      .then(async users => {
-        // delays continuous execution of an async operation for 0.8 seconds.
-        // This is just a fake async call, so that the spinner can be displayed
-        // feel free to remove it :)
-        await new Promise(resolve => setTimeout(resolve, 800));
-
+      .then( users => {
         this.setState({ users });
       })
       .catch(err => {
