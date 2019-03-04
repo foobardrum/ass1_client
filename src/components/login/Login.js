@@ -95,11 +95,14 @@ class Login extends React.Component {
    */
   login() {
       //query in rsql language: https://github.com/jirutka/rsql-parser
-      var query = 'username=="'+this.state.username+'";password=="'+this.state.password+'"';
-    fetch(`${getDomain()}/users?search=`+query, {
-      method: "GET",
+    fetch(`${getDomain()}/users/me`, {
+      method: "POST",
       headers: {
         "Content-Type": "application/json"
+      },
+      body: {
+        username: this.state.username,
+        password: this.state.password
       }
     })
       .then(response => response.json())
@@ -113,7 +116,7 @@ class Login extends React.Component {
           // user login successfully worked --> navigate to the route /game in the GameRouter
           this.props.history.push(`/game`);
         }else{
-          alert("Login not successful! Please check your username / password...")
+          alert("Login not successful! Please check your username and password.")
         }
       })
       .catch(err => {
