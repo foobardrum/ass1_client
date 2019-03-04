@@ -5,7 +5,13 @@ import { getDomain } from "../../helpers/getDomain";
 import {Link, withRouter} from "react-router-dom";
 import { Button } from "../../views/design/Button";
 
+const Container = styled(BaseContainer)`
+  text-align: center;
+  color: #FFF;
+`;
+
 const FormContainer = styled.div`
+  text-align: left;
   margin-top: 2em;
   display: flex;
   flex-direction: column;
@@ -140,7 +146,8 @@ class Register extends React.Component {
 
   render() {
     return (
-      <BaseContainer>
+      <Container>
+        <h2>Register</h2>
         <FormContainer>
           <Form>
             <Label>Username</Label>
@@ -176,7 +183,7 @@ class Register extends React.Component {
             </ButtonContainer>
           </Form>
         </FormContainer>
-      </BaseContainer>
+      </Container>
     );
   }
 }
