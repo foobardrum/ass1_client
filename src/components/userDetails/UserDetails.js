@@ -8,6 +8,7 @@ import { Button } from "../../views/design/Button";
 import {Link, withRouter} from "react-router-dom";
 import User from "../shared/models/User";
 import dateTime from "../../helpers/dateTime";
+import {handleErrors} from "../../helpers/handleErrors";
 
 const Container = styled(BaseContainer)`
   color: white;
@@ -39,6 +40,12 @@ const Form = styled.div`
 `;
 
 const ButtonContainer = styled.div`
+  justify-content: center;
+  margin-top: 20px;
+  display: ${props=>{return props.show?'flex':'none'}}
+`;
+
+const LinkContainer = styled.div`
   display: flex;
   justify-content: center;
   margin-top: 20px;
@@ -54,6 +61,7 @@ class UserDetails extends React.Component {
         this.state = {
             user: null,
             isDisabled: false,
+            isEditing: false,
             key: match.params.key
         };
 
@@ -68,29 +76,29 @@ class UserDetails extends React.Component {
     handleInputChange(key, value) {
         // Example: if the key is username, this statement is the equivalent to the following one:
         // this.setState({'username': value});
-        console.log(this);
-        this.setState({ [key]: value });
+        let user = Object.assign({},this.state.user);
+        user[key] = value;
+        this.setState({ user: new User(user) });
+    }
+
+    editUser(){
+        this.setState({isEditing: true});
     }
 
     updateUser(){
-        if(dateTime.checkDate(this.state.user.birthdayDate)){
-            fetch(`${getDomain()}/users/`+this.state.key, {
-                method: "PUT",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify(this.state.user.getFormattedUser())
+        fetch(`${getDomain()}/users/`+this.state.key, {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(this.state.user)
+        })
+            .then(handleErrors)
+            .then(response => {
+                this.setState({isEditing: false});
+                alert('Succesfully updated user!');
             })
-                .then(response => {
-                    if(response.status === 202){
-                        alert('Succesfully updated user!');
-                    }else{
-                        alert('Error updating user!')
-                    }
-                })
-        }else{
-            alert('The format of your birthday is wrong!');
-        }
+            .catch(error => alert('Error updating user!'))
     }
 
     componentDidMount() {
@@ -108,7 +116,7 @@ class UserDetails extends React.Component {
                 });
             })
             .catch(err => {
-                console.log(err);
+                console.error(err);
                 alert("Something went wrong fetching the users: " + err);
             });
     }
@@ -127,14 +135,14 @@ class UserDetails extends React.Component {
                                 <InputRow label="username"
                                           value={this.state.user.username}
                                           name="username"
-                                          disabled={this.state.isDisabled}
+                                          disabled={!this.state.isEditing}
                                           handleInputChange={this.handleInputChange}
                                     />
                                 <InputRow label="birthday date"
-                                          value={this.state.user.birthdayDate}
+                                          value={this.state.user.birthdayDate?this.state.user.birthdayDate:""}
                                           name="birthdayDate"
-                                          placeholder="dd.mm.yyyy"
-                                          disabled={this.state.isDisabled}
+                                          type="date"
+                                          disabled={!this.state.isEditing}
                                           handleInputChange={this.handleInputChange}
                                 />
                                 <InputRow label="online status"
@@ -144,26 +152,28 @@ class UserDetails extends React.Component {
                                           handleInputChange={function () {}}
                                 />
                                 <InputRow label="creation date"
-                                          value={this.state.user.registrationDateTime}
+                                          value={dateTime.beautifyDateTime(this.state.user.registrationDateTime)}
                                           name="registrationDateTime"
                                           disabled={true}
                                           handleInputChange={function () {}}
                                 />
-
-                                <ButtonContainer>
+                                <ButtonContainer show={!this.state.isDisabled}>
                                     <Button
-                                        disabled={this.state.isDisabled}
                                         width="50%"
                                         onClick={() => {
-                                            this.updateUser();
+                                            if(this.state.isEditing){
+                                                this.updateUser();
+                                            }else{
+                                                this.editUser();
+                                            }
                                         }}
                                     >
-                                        Save
+                                        {this.state.isEditing?'Save':'Edit'}
                                     </Button>
                                 </ButtonContainer>
-                                <ButtonContainer>
+                                <LinkContainer>
                                     <StyledLink to="/game/dashboard">Go back to overview</StyledLink>
-                                </ButtonContainer>
+                                </LinkContainer>
                             </Form>
                         </FormContainer>
                     </div>
