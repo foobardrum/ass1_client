@@ -38,6 +38,7 @@ const InputRow = (props) => {
                     value={props.value}
                     disabled = {props.disabled}
                     placeholder = {props.placeholder}
+                    type={props.type}
                     onChange={e => {
                         props.handleInputChange(props.name, e.target.value);
                     }}
