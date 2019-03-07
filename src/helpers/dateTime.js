@@ -5,7 +5,6 @@ class dateTime{
         let date = timestamp.slice(0,10);
         date = date.split("-").reverse().join('.');
         let time = timestamp.slice(11,16);
-        console.log(date,time);
         return date+', '+time;
     };
 
