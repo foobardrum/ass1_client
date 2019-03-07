@@ -14,16 +14,6 @@ class User {
     this.games = null;
     this.moves = null;
     Object.assign(this, data);
-    this.registrationDateTime = dateTime.beautifyDateTime(data.registrationDateTime);
-    this.birthdayDate = dateTime.beautifyDate(data.birthdayDate);
-
-  }
-
-  getFormattedUser() {
-      let formattedUser = new User(this);
-      formattedUser.registrationDateTime = dateTime.formatDateTime(formattedUser.registrationDateTime);
-      formattedUser.birthdayDate = dateTime.formatDate(formattedUser.birthdayDate);
-      return formattedUser;
   }
 }
 export default User;
