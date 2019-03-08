@@ -115,11 +115,8 @@ class Login extends React.Component {
         this.props.history.push(`/game`);
       })
       .catch(err => {
-        if (err.message === '406') {
-          alert("Login not successful! Please check your username and password.");
-        } else {
-          alert(`Something went wrong during the login: ${err.message}`);
-        }
+        console.error(err);
+        alert(err.message);
       });
   }
 

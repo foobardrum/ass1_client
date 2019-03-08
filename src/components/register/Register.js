@@ -4,6 +4,7 @@ import { BaseContainer } from "../../helpers/layout";
 import { getDomain } from "../../helpers/getDomain";
 import {Link, withRouter} from "react-router-dom";
 import { Button } from "../../views/design/Button";
+import {handleErrors} from "../../helpers/handleErrors";
 
 const Container = styled(BaseContainer)`
   text-align: center;
@@ -102,24 +103,13 @@ class Register extends React.Component {
         username: this.state.username,
         password: this.state.password
       })
-    })
+    }).then(handleErrors)
       .then(response =>{
-          response.json();
-          var status = response.status;
-          if(status === 201){
-              this.props.history.push(`/login`);
-          }else if(status === 409){
-              alert("this username has already been taken!");
-          }else{
-              alert("The server responded with status: " + status);
-          }
+          this.props.history.push(`/login`);
       })
       .catch(err => {
-        if (err.message.match(/Failed to fetch/)) {
-          alert("The server cannot be reached. Did you start it?");
-        } else {
-          alert(`Something went wrong during the register: ${err.message}`);
-        }
+        console.error(err);
+        alert(err.message);
       });
   }
 

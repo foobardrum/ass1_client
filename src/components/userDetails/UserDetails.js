@@ -98,7 +98,10 @@ class UserDetails extends React.Component {
                 this.setState({isEditing: false});
                 alert('Succesfully updated user!');
             })
-            .catch(error => alert('Error updating user!'))
+            .catch(err => {
+                console.error(err);
+                alert(err.message);
+            })
     }
 
     componentDidMount() {
@@ -117,7 +120,7 @@ class UserDetails extends React.Component {
             })
             .catch(err => {
                 console.error(err);
-                alert("Something went wrong fetching the users: " + err);
+                alert(err.message);
             });
     }
 

@@ -1,6 +1,13 @@
 export const handleErrors = (response) => {
-    if(!response.ok){
-        throw Error(response.status);
-    }
-    return response;
+    return response.json()
+        .then(json => {
+            if (response.ok) {
+                return json
+            } else {
+                return Promise.reject(Object.assign({}, json, {
+                    status: response.status,
+                    statusText: response.statusText
+                }))
+            }
+        })
 };
