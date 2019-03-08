@@ -5,6 +5,7 @@ import { getDomain } from "../../helpers/getDomain";
 import User from "../shared/models/User";
 import {Link, withRouter} from "react-router-dom";
 import { Button } from "../../views/design/Button";
+import {handleErrors} from "../../helpers/handleErrors";
 
 const Container = styled(BaseContainer)`
   text-align: center;
@@ -104,25 +105,18 @@ class Login extends React.Component {
         password: this.state.password
       })
     })
-      .then(response => {
-        if(response.status === 406) return false;
-        return response.json();
-      })
+      .then(handleErrors)
       .then((returnedUser) => {
-        if(returnedUser) {
-          const user = new User(returnedUser);
-          // store the token into the local storage
-          localStorage.setItem("token", user.token);
-          localStorage.setItem("userId", user.id);
-          // user login successfully worked --> navigate to the route /game in the GameRouter
-          this.props.history.push(`/game`);
-        }else{
-          alert("Login not successful! Please check your username and password.")
-        }
+        const user = new User(returnedUser);
+        // store the token into the local storage
+        localStorage.setItem("token", user.token);
+        localStorage.setItem("userId", user.id);
+        // user login successfully worked --> navigate to the route /game in the GameRouter
+        this.props.history.push(`/game`);
       })
       .catch(err => {
-        if (err.message.match(/Failed to fetch/)) {
-          alert("The server cannot be reached. Did you start it?");
+        if (err.message === '406') {
+          alert("Login not successful! Please check your username and password.");
         } else {
           alert(`Something went wrong during the login: ${err.message}`);
         }
