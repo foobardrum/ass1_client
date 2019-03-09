@@ -7,6 +7,7 @@ import { Spinner } from "../../views/design/Spinner";
 import { Button } from "../../views/design/Button";
 import { withRouter } from "react-router-dom";
 import Link from "react-router-dom/es/Link";
+import {handleErrors} from "../../helpers/handleErrors";
 
 const Container = styled(BaseContainer)`
   color: white;
@@ -50,12 +51,13 @@ class Game extends React.Component {
       body:JSON.stringify({
         status: "OFFLINE"
       })
-    }).then(response => {
+    })
+      .then(response => {
       localStorage.removeItem("token");
       localStorage.removeItem("userId");
       this.props.history.push("/login");
     }).catch(err => {
-      alert('Couldn\'t log out!');
+      alert('Couldn\'t logout User!');
     });
   }
 
@@ -66,13 +68,13 @@ class Game extends React.Component {
         "Content-Type": "application/json"
       }
     })
-      .then(response => response.json())
+      .then(handleErrors)
       .then( users => {
         this.setState({ users });
       })
       .catch(err => {
         console.log(err);
-        alert("Something went wrong fetching the users: " + err);
+        alert(err.message);
       });
   }
 
