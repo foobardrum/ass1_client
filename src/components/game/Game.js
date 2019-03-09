@@ -46,7 +46,8 @@ class Game extends React.Component {
     fetch(`${getDomain()}/users/`+localStorage.getItem('userId'), {
       method: "PUT",
       headers: {
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
+        "Authorization": localStorage.getItem("token")
       },
       body:JSON.stringify({
         status: "OFFLINE"
@@ -65,7 +66,8 @@ class Game extends React.Component {
     fetch(`${getDomain()}/users`, {
       method: "GET",
       headers: {
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
+        "Authorization": localStorage.getItem("token")
       }
     })
       .then(handleErrors)

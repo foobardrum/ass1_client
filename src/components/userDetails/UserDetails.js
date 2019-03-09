@@ -89,7 +89,8 @@ class UserDetails extends React.Component {
         fetch(`${getDomain()}/users/`+this.state.key, {
             method: "PUT",
             headers: {
-                "Content-Type": "application/json"
+                "Content-Type": "application/json",
+                "Authorization": localStorage.getItem("token")
             },
             body: JSON.stringify(this.state.user)
         })
@@ -108,7 +109,8 @@ class UserDetails extends React.Component {
         fetch(`${getDomain()}/users/`+this.state.key, {
             method: "GET",
             headers: {
-                "Content-Type": "application/json"
+                "Content-Type": "application/json",
+                "Authorization": localStorage.getItem("token")
             }
         })
             .then(response => response.json())
