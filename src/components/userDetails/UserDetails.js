@@ -94,7 +94,6 @@ class UserDetails extends React.Component {
             },
             body: JSON.stringify(this.state.user)
         })
-            .then(handleErrors)
             .then(response => {
                 this.setState({isEditing: false});
                 alert('Succesfully updated user!');
